@@ -1,0 +1,4 @@
+[Project]
+Name=explosive-c4
+Manager=KDevCMakeManager
+VersionControl=kdevgit
