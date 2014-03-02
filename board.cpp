@@ -117,7 +117,6 @@ void Board::check_winner(int row, int col) {
         }
     }
 
-
     //Horizontal
     {
         int count = 0;
