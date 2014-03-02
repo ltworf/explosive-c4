@@ -38,32 +38,32 @@ class Board : public QObject {
 
 public:
     Board();
-    Board(unsigned int rows, unsigned int cols);
-    Board(unsigned int rows, unsigned int cols, player_t initial);
+    Board(int rows, int cols);
+    Board(int rows, int cols, player_t initial);
     Board(player_t initial);
     ~Board();
 
-    void get_size(unsigned int *rows, unsigned int *cols);
-    bool place(unsigned int col, player_t player);
-    cell_t get_content(unsigned int row, unsigned int col);
+    void get_size(int *rows, int *cols);
+    bool place(int col, player_t player);
+    cell_t get_content(int row, int col);
     player_t get_turn();
 
     void dump();
 
 private:
-    unsigned int rows;
-    unsigned int cols;
-    unsigned int size;
+    int rows;
+    int cols;
+    int size;
     cell_t *internal_board;
 
     player_t turn = PLAYER_RED;
-    void check_winner(unsigned int row, unsigned int col);
+    void check_winner(int row, int col);
 
     bool completed = false;
 
 signals:
-    void winner(player_t,unsigned int row, unsigned int col);
-    void changed(unsigned int row, unsigned int col);
+    void winner(player_t,int row, int col);
+    void changed(int row, int col);
 };
 
 #endif // BOARD_H

@@ -39,13 +39,13 @@ protected:
     virtual void paintEvent(QPaintEvent *);
 
 private slots:
-    void changed(unsigned int row, unsigned int col);
-    void winner(player_t winner,unsigned int row, unsigned int col);
+    void changed(int row, int col);
+    void winner(player_t winner,int row, int col);
 
 
 private:
     Board * board;
-    unsigned int diameter;
+    int diameter;
     int winner_row = -1;
     int winner_col = -1;
 };

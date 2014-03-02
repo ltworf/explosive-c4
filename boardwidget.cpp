@@ -28,14 +28,14 @@ BoardWidget::BoardWidget() {
     QWidget();
     board = new Board(6,7);
     connect(board,
-            SIGNAL(changed(unsigned int,unsigned int)),
+            SIGNAL(changed(int,int)),
             this,
-            SLOT(changed(unsigned int, unsigned int))
+            SLOT(changed(int,int))
            );
     connect(board,
-            SIGNAL(winner(player_t,unsigned int,unsigned int)),
+            SIGNAL(winner(player_t,int, int)),
             this,
-            SLOT(winner(player_t,unsigned int,unsigned int))
+            SLOT(winner(player_t, int, int))
            );
 }
 
@@ -43,7 +43,7 @@ BoardWidget::~BoardWidget() {
     delete board;
 }
 
-void BoardWidget::winner(player_t winner, unsigned int row, unsigned int col) {
+void BoardWidget::winner(player_t winner, int row, int col) {
     winner_row = row;
     winner_col = col;
 }
@@ -57,19 +57,19 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 
     painter.fillRect(0,0,size.width(),size.height(),QColor(0,0,0));
 
-    unsigned int rows;
-    unsigned int cols;
+    int rows;
+    int cols;
     board->get_size(&rows,&cols);
 
-    unsigned int w_max = size.width() / cols;
-    unsigned int h_max = size.height() / rows;
+    int w_max = size.width() / cols;
+    int h_max = size.height() / rows;
     diameter = w_max < h_max ? w_max : h_max;
 
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     //TODO full circles
-    for (unsigned int r=0; r<rows;r++){
-        for (unsigned int c=0; c<cols;c++) {
+    for (int r=0; r<rows;r++){
+        for (int c=0; c<cols;c++) {
             cell_t cell = board->get_content(r,c);
              switch (cell) {
                 case CELL_RED:
@@ -97,7 +97,7 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 
 }
 
-void BoardWidget::changed(unsigned int row, unsigned int col) {
+void BoardWidget::changed(int row, int col) {
     update(col*diameter,row*diameter,diameter,diameter);
 }
 
@@ -108,8 +108,8 @@ void BoardWidget::mousePressEvent(QMouseEvent *ev) {
     QWidget::mousePressEvent(ev);
     int column = ev->x() / diameter;
 
-    unsigned int rows;
-    unsigned int cols;
+    int rows;
+    int cols;
     board->get_size(&rows,&cols);
 
     if (column >= cols)
@@ -121,16 +121,16 @@ void BoardWidget::mousePressEvent(QMouseEvent *ev) {
 
 
 QSize BoardWidget::minimumSizeHint() {
-    unsigned int rows;
-    unsigned int cols;
+    int rows;
+    int cols;
     board->get_size(&rows,&cols);
 
     return QSize(cols*30,rows*30);
 }
 
 QSize BoardWidget::sizeHint() {
-    unsigned int rows;
-    unsigned int cols;
+    int rows;
+    int cols;
     board->get_size(&rows,&cols);
 
     return QSize(cols*diameter,rows*diameter);

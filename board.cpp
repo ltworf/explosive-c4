@@ -24,7 +24,7 @@ Board::Board() {
     Board(6,7);
 }
 
-Board::Board(unsigned int rows, unsigned int cols, player_t initial): QObject() {
+Board::Board(int rows, int cols, player_t initial): QObject() {
     turn = initial;
     Board(rows,cols);
 }
@@ -36,7 +36,7 @@ Board::Board(player_t initial): QObject() {
 
 
 
-Board::Board(unsigned int rows, unsigned int cols): QObject() {
+Board::Board(int rows, int cols): QObject() {
     this->rows = rows;
     this->cols = cols;
     this->size = rows*cols;
@@ -50,12 +50,12 @@ Board::~Board() {
     delete this->internal_board;
 }
 
-void Board::get_size(unsigned int *rows, unsigned int *cols) {
+void Board::get_size(int *rows, int *cols) {
     *rows = this->rows;
     *cols = this->cols;
 }
 
-bool Board::place(unsigned int col, player_t player) {
+bool Board::place(int col, player_t player) {
 
     if (turn != player || completed)
         return false;
@@ -65,7 +65,7 @@ bool Board::place(unsigned int col, player_t player) {
     while (current_cell>=0) {
 
         if (this->internal_board[current_cell] == CELL_EMPTY) {
-            unsigned int row = (current_cell-col)/cols;
+            int row = (current_cell-col)/cols;
 
             this->internal_board[current_cell] = (cell_t)player;
             turn = (player_t)~turn;
@@ -81,7 +81,7 @@ bool Board::place(unsigned int col, player_t player) {
     return false;
 }
 
-void Board::check_winner(unsigned int row, unsigned int col) {
+void Board::check_winner(int row, int col) {
 
     cell_t current = get_content(row,col);
     player_t current_player = (player_t)current;
@@ -91,13 +91,13 @@ void Board::check_winner(unsigned int row, unsigned int col) {
     {
         int count = 0;
         for (int i = col - 3; i <= col + 3; i++) {
-            printf("%d %d\n",col,count);
+
             if (get_content(row,i) == current)
                 count++;
             else
                 count = 0;
+
             if (count == 4) {
-                printf("WINNER\n");
                 goto win;
             }
         }
@@ -145,7 +145,7 @@ void Board::dump() {
     }
 }
 
-cell_t Board::get_content(unsigned int row, unsigned int col) {
+cell_t Board::get_content(int row, int col) {
     if (row<rows && col < cols)
         return this->internal_board[col+row*cols];
     else
