@@ -1,0 +1,10 @@
+board.cpp
+board.h
+boardwidget.cpp
+boardwidget.h
+CMakeLists.txt
+explosive-c4.cpp
+explosive-c4.h
+LICENSE
+main.cpp
+README.md
