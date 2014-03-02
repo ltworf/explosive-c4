@@ -26,6 +26,14 @@
 
 BoardWidget::BoardWidget() {
     QWidget();
+    init();
+
+}
+
+void BoardWidget::init() {
+    if (board!=NULL) {
+        delete board;
+    }
     board = new Board();
     connect(board,
             SIGNAL(changed(int,int)),
@@ -37,6 +45,8 @@ BoardWidget::BoardWidget() {
             this,
             SLOT(winner(player_t, int, int))
            );
+    QSize size = this->size();
+    update(0,0,size.width(),size.height());
 }
 
 BoardWidget::~BoardWidget() {
@@ -46,6 +56,11 @@ BoardWidget::~BoardWidget() {
 void BoardWidget::winner(player_t winner, int row, int col) {
     winner_row = row;
     winner_col = col;
+}
+
+void BoardWidget::newgame() {
+    winner_col = winner_row = -1;
+    init();
 }
 
 

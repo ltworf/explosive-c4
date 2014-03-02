@@ -38,16 +38,21 @@ protected:
     virtual void mousePressEvent(QMouseEvent *);
     virtual void paintEvent(QPaintEvent *);
 
+public slots:
+    void newgame();
+
 private slots:
     void changed(int row, int col);
     void winner(player_t winner,int row, int col);
 
 
 private:
-    Board * board;
+    Board * board = NULL;
     int diameter;
     int winner_row = -1;
     int winner_col = -1;
+
+    void init();
 };
 
 #endif // BOARDWIDGET_H
