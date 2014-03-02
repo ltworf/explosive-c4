@@ -88,7 +88,34 @@ void Board::check_winner(int row, int col) {
     cell_t current = get_content(row,col);
     player_t current_player = (player_t)current;
 
-    //TODO diagonal
+    // diagonal
+    {
+        int count = 0;
+        for (int i = -3; i<=col+3; i++) {
+            if (get_content(row+i,col+i) == current)
+                count++;
+            else
+                count = 0;
+
+            if (count == 4) {
+                goto win;
+            }
+        }
+    }
+
+    {
+        int count = 0;
+        for (int i = -3; i<=col+3; i++) {
+            if (get_content(row+i,col-i) == current)
+                count++;
+            else
+                count = 0;
+
+            if (count == 4) {
+                goto win;
+            }
+        }
+    }
 
 
     //Horizontal
