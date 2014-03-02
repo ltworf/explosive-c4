@@ -31,17 +31,23 @@ public:
     BoardWidget();
     ~BoardWidget();
 
-//     virtual QSize sizeHint();
-//     virtual QSize minimumSizeHint();
-protected:
-//     virtual void mousePressEvent(QMouseEvent *);
-    virtual void paintEvent(QPaintEvent *);
-//     virtual void resizeEvent(QResizeEvent *);
+    virtual QSize sizeHint();
+    virtual QSize minimumSizeHint();
 
+protected:
+    virtual void mousePressEvent(QMouseEvent *);
+    virtual void paintEvent(QPaintEvent *);
+
+private slots:
+    void changed(unsigned int row, unsigned int col);
+    void winner(player_t winner,unsigned int row, unsigned int col);
 
 
 private:
     Board * board;
+    unsigned int diameter;
+    int winner_row = -1;
+    int winner_col = -1;
 };
 
 #endif // BOARDWIDGET_H

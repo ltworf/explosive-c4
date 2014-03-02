@@ -57,7 +57,7 @@ void Board::get_size(unsigned int *rows, unsigned int *cols) {
 
 bool Board::place(unsigned int col, player_t player) {
 
-    if (turn != player)
+    if (turn != player || completed)
         return false;
 
     int current_cell = col+((rows-1)*cols);
@@ -82,7 +82,41 @@ bool Board::place(unsigned int col, player_t player) {
 }
 
 void Board::check_winner(unsigned int row, unsigned int col) {
-    //TODO
+
+    cell_t current = get_content(row,col);
+    player_t current_player = (player_t)current;
+
+
+    //Horizontal
+    {
+        int count = 0;
+        for (int i = col - 3; i <= col + 3; i++) {
+            printf("%d %d\n",col,count);
+            if (get_content(row,i) == current)
+                count++;
+            else
+                count = 0;
+            if (count == 4) {
+                printf("WINNER\n");
+                goto win;
+            }
+        }
+    }
+
+    //Vertical
+    {
+        int count = 0;
+        for (int i = row+1; i <=row+3; i++) {
+            if (get_content(i,col) == current)
+                count ++;
+        }
+        if (count == 3)
+            goto win;
+    }
+    return;
+win:
+    emit winner(current_player,row,col);
+    completed = true;
 }
 
 player_t Board::get_turn() {
@@ -112,7 +146,10 @@ void Board::dump() {
 }
 
 cell_t Board::get_content(unsigned int row, unsigned int col) {
-    return this->internal_board[col+row*cols];
+    if (row<rows && col < cols)
+        return this->internal_board[col+row*cols];
+    else
+        return CELL_EMPTY;
 }
 
 

@@ -59,8 +59,10 @@ private:
     player_t turn = PLAYER_RED;
     void check_winner(unsigned int row, unsigned int col);
 
+    bool completed = false;
+
 signals:
-    void winner(player_t);
+    void winner(player_t,unsigned int row, unsigned int col);
     void changed(unsigned int row, unsigned int col);
 };
 

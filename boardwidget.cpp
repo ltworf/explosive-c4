@@ -18,17 +18,36 @@
  */
 
 #include <QtGui/QPainter>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QColor>
+#include <QtGui/QBrush>
 
 #include "boardwidget.h"
 
 BoardWidget::BoardWidget() {
     QWidget();
-    board = new Board(7,7);
+    board = new Board(6,7);
+    connect(board,
+            SIGNAL(changed(unsigned int,unsigned int)),
+            this,
+            SLOT(changed(unsigned int, unsigned int))
+           );
+    connect(board,
+            SIGNAL(winner(player_t,unsigned int,unsigned int)),
+            this,
+            SLOT(winner(player_t,unsigned int,unsigned int))
+           );
 }
 
 BoardWidget::~BoardWidget() {
     delete board;
 }
+
+void BoardWidget::winner(player_t winner, unsigned int row, unsigned int col) {
+    winner_row = row;
+    winner_col = col;
+}
+
 
 void BoardWidget::paintEvent(QPaintEvent * p) {
     QWidget::paintEvent(p);
@@ -36,36 +55,85 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 
     QSize size = this->size();
 
+    painter.fillRect(0,0,size.width(),size.height(),QColor(0,0,0));
+
     unsigned int rows;
     unsigned int cols;
     board->get_size(&rows,&cols);
 
     unsigned int w_max = size.width() / cols;
     unsigned int h_max = size.height() / rows;
-    unsigned int diameter = w_max < h_max ? w_max : h_max;
+    diameter = w_max < h_max ? w_max : h_max;
 
     painter.setRenderHint(QPainter::Antialiasing, true);
 
+    //TODO full circles
     for (unsigned int r=0; r<rows;r++){
         for (unsigned int c=0; c<cols;c++) {
             cell_t cell = board->get_content(r,c);
              switch (cell) {
                 case CELL_RED:
                     painter.setPen(QPen(Qt::red, 1));
+                    painter.setBrush(QBrush (Qt::red,Qt::SolidPattern));
                     break;
                 case CELL_YELLOW:
                     painter.setPen(QPen(Qt::yellow, 1));
+                    painter.setBrush(QBrush (Qt::yellow,Qt::SolidPattern));
                     break;
                 case CELL_EMPTY:
                     painter.setPen(QPen(Qt::white, 1));
+                    painter.setBrush(QBrush (Qt::white,Qt::SolidPattern));
                     break;
             }
 
-            painter.drawEllipse(diameter*r,diameter*c,diameter-2,diameter-2);
+            if (c==winner_col and r==winner_row)
+                painter.fillRect(diameter*c,diameter*r,diameter-2,diameter-2,QColor(255,255,255));
+
+
+            painter.drawEllipse(diameter*c,diameter*r,diameter-2,diameter-2);
         }
 
     }
 
+}
+
+void BoardWidget::changed(unsigned int row, unsigned int col) {
+    update(col*diameter,row*diameter,diameter,diameter);
+}
+
+
+
+
+void BoardWidget::mousePressEvent(QMouseEvent *ev) {
+    QWidget::mousePressEvent(ev);
+    int column = ev->x() / diameter;
+
+    unsigned int rows;
+    unsigned int cols;
+    board->get_size(&rows,&cols);
+
+    if (column >= cols)
+        return;
+
+    player_t t = board->get_turn();
+    board->place(column,t);
+}
+
+
+QSize BoardWidget::minimumSizeHint() {
+    unsigned int rows;
+    unsigned int cols;
+    board->get_size(&rows,&cols);
+
+    return QSize(cols*30,rows*30);
+}
+
+QSize BoardWidget::sizeHint() {
+    unsigned int rows;
+    unsigned int cols;
+    board->get_size(&rows,&cols);
+
+    return QSize(cols*diameter,rows*diameter);
 }
 
 
