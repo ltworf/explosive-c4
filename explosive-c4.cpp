@@ -1,15 +1,15 @@
 #include "explosive-c4.h"
 
-#include <QtGui/QLabel>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
 #include <QtGui/QAction>
 
+#include "boardwidget.h"
+
 explosive_c4::explosive_c4()
 {
-    QLabel* l = new QLabel( this );
-    l->setText( "Hello World!" );
-    setCentralWidget( l );
+    BoardWidget *boardwidget = new BoardWidget();
+    setCentralWidget( boardwidget );
     QAction* a = new QAction(this);
     a->setText( "Quit" );
     connect(a, SIGNAL(triggered()), SLOT(close()) );
