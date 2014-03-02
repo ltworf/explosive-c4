@@ -12,6 +12,8 @@ explosive_c4::explosive_c4() {
     setPalette(mainui->palette());
     resize(457, 640);
 
+    setWindowTitle("explosive-c4");
+
 //     QAction* a = new QAction(this);
 //     a->setText( "Quit" );
 //     connect(a, SIGNAL(triggered()), SLOT(close()) );

@@ -23,9 +23,11 @@
 #include <QtGui/QBrush>
 
 #include "boardwidget.h"
+#include "boardai.h"
 
-BoardWidget::BoardWidget() {
+BoardWidget::BoardWidget(boardwidget_t board_type) {
     QWidget();
+    this->board_type = board_type;
     init();
 
 }
@@ -34,7 +36,13 @@ void BoardWidget::init() {
     if (board!=NULL) {
         delete board;
     }
-    board = new Board();
+    switch (board_type) {
+        case BOARD_WIDGET_LOCAL:
+            board = new Board();
+            break;
+        case BOARD_WIDGET_AI:
+            board = new BoardAI();
+    }
     connect(board,
             SIGNAL(changed(int,int)),
             this,

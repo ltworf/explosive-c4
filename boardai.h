@@ -17,49 +17,10 @@
  *
  */
 
-#ifndef BOARDWIDGET_H
-#define BOARDWIDGET_H
+#ifndef BOARDAI_H
+#define BOARDAI_H
 
-#include <QWidget>
-
-#include "board.h"
-
-typedef enum {
-    BOARD_WIDGET_LOCAL,
-    BOARD_WIDGET_AI,
-    BOARD_WIDGET_NETWORK,
-} boardwidget_t;
-
-class BoardWidget : public QWidget {
-    Q_OBJECT
-
-public:
-    BoardWidget(boardwidget_t);
-    ~BoardWidget();
-
-    virtual QSize sizeHint();
-    virtual QSize minimumSizeHint();
-
-protected:
-    virtual void mousePressEvent(QMouseEvent *);
-    virtual void paintEvent(QPaintEvent *);
-
-public slots:
-    void newgame();
-
-private slots:
-    void changed(int row, int col);
-    void winner(player_t winner,int row, int col);
-
-
-private:
-    Board * board = NULL;
-    int diameter;
-    int winner_row = -1;
-    int winner_col = -1;
-    boardwidget_t board_type;
-
-    void init();
+class BoardAI {
 };
 
-#endif // BOARDWIDGET_H
+#endif // BOARDAI_H
