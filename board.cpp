@@ -21,22 +21,23 @@
 #include "board.h"
 
 Board::Board() {
-    Board(6,7);
+    init(6,7,PLAYER_RED);
 }
 
 Board::Board(int rows, int cols, player_t initial): QObject() {
-    turn = initial;
-    Board(rows,cols);
+    init(rows,cols,initial);
 }
 
 Board::Board(player_t initial): QObject() {
-    turn = initial;
-    Board();
+    init(6,7,initial);
 }
 
-
-
 Board::Board(int rows, int cols): QObject() {
+    init(rows,cols,PLAYER_RED);
+}
+
+void Board::init(int rows, int cols, player_t initial) {
+    this->turn = initial;
     this->rows = rows;
     this->cols = cols;
     this->size = rows*cols;
@@ -44,6 +45,7 @@ Board::Board(int rows, int cols): QObject() {
     this->internal_board = new cell_t[size];
     memset(internal_board, 0, size*sizeof(cell_t));
 }
+
 
 
 Board::~Board() {
@@ -85,6 +87,8 @@ void Board::check_winner(int row, int col) {
 
     cell_t current = get_content(row,col);
     player_t current_player = (player_t)current;
+
+    //TODO diagonal
 
 
     //Horizontal

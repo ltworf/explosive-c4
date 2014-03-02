@@ -26,7 +26,7 @@
 
 BoardWidget::BoardWidget() {
     QWidget();
-    board = new Board(6,7);
+    board = new Board();
     connect(board,
             SIGNAL(changed(int,int)),
             this,
@@ -100,8 +100,6 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 void BoardWidget::changed(int row, int col) {
     update(col*diameter,row*diameter,diameter,diameter);
 }
-
-
 
 
 void BoardWidget::mousePressEvent(QMouseEvent *ev) {
