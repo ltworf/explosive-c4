@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>568</width>
+    <width>619</width>
     <height>640</height>
    </rect>
   </property>
@@ -16,12 +16,14 @@
   <property name="styleSheet">
    <string notr="true">* {
 background-color: black;
+color: white;
 font: 24px;
 }
 
 
-QPushButton {
 
+QPushButton {
+color: black;
 background-color: yellow;
 
 border-width: 1px;
@@ -33,9 +35,6 @@ border-radius: 10px;
 min-width: 3em;
 min-height: 30px;
 padding: 6px;
-
-
-
 }
 
 QPushButton:pressed {
@@ -93,19 +92,6 @@ border-color: rgb(255, 193, 0);
        </widget>
       </item>
       <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
        <widget class="QPushButton" name="cmdIAGame">
         <property name="locale">
          <locale language="English" country="UnitedStates"/>
@@ -120,19 +106,6 @@ border-color: rgb(255, 193, 0);
          <bool>false</bool>
         </property>
        </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
       </item>
       <item>
        <widget class="QPushButton" name="cmdNetworkGame">
@@ -165,6 +138,13 @@ border-color: rgb(255, 193, 0);
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cmdAbout">
+        <property name="text">
+         <string>About</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -225,6 +205,45 @@ border-color: rgb(255, 193, 0);
          </widget>
         </item>
        </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frmAbout">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <widget class="QPushButton" name="cmdAboutBack">
+        <property name="text">
+         <string>←</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>About</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>517</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>
@@ -358,6 +377,70 @@ border-color: rgb(255, 193, 0);
     <hint type="destinationlabel">
      <x>55</x>
      <y>233</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmdAbout</sender>
+   <signal>clicked()</signal>
+   <receiver>frmAbout</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>66</x>
+     <y>599</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>531</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmdAbout</sender>
+   <signal>clicked()</signal>
+   <receiver>frmInitial</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>66</x>
+     <y>599</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>66</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmdAboutBack</sender>
+   <signal>clicked()</signal>
+   <receiver>frmAbout</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>496</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>559</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmdAboutBack</sender>
+   <signal>clicked()</signal>
+   <receiver>frmInitial</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>496</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>66</x>
+     <y>319</y>
     </hint>
    </hints>
   </connection>
