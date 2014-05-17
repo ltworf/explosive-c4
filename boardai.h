@@ -20,7 +20,10 @@
 #ifndef BOARDAI_H
 #define BOARDAI_H
 
-class BoardAI {
+#include "board.h"
+
+class BoardAI: public Board {
+
 };
 
 #endif // BOARDAI_H

@@ -41,7 +41,7 @@ void BoardWidget::init() {
             board = new Board();
             break;
         case BOARD_WIDGET_AI:
-            //board = new BoardAI();
+            board = new BoardAI();
             break;
     }
     connect(board,
@@ -91,7 +91,6 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    //TODO full circles
     for (int r=0; r<rows;r++){
         for (int c=0; c<cols;c++) {
             cell_t cell = board->get_content(r,c);
