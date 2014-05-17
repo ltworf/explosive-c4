@@ -20,6 +20,11 @@
 
 #include "board.h"
 
+/**
+ * @brief Board::Board
+ *
+ * Default board: 6*7, red player starts
+ */
 Board::Board() {
     init(6,7,PLAYER_RED);
 }
@@ -28,10 +33,23 @@ Board::Board(int rows, int cols, player_t initial): QObject() {
     init(rows,cols,initial);
 }
 
+/**
+ * @brief Board::Board
+ * @param initial: the player which starts
+ *
+ * Default 6*7 board
+ */
 Board::Board(player_t initial): QObject() {
     init(6,7,initial);
 }
 
+/**
+ * @brief Board::Board
+ * @param rows
+ * @param cols
+ *
+ * Red player starts
+ */
 Board::Board(int rows, int cols): QObject() {
     init(rows,cols,PLAYER_RED);
 }
@@ -47,40 +65,74 @@ void Board::init(int rows, int cols, player_t initial) {
 }
 
 
-
 Board::~Board() {
     delete this->internal_board;
 }
 
+/**
+ * @brief Board::get_size
+ * @param rows
+ * @param cols
+ *
+ * The pointed variables will be set with
+ * the values of rows and columns.
+ */
 void Board::get_size(int *rows, int *cols) {
     *rows = this->rows;
     *cols = this->cols;
 }
 
+/**
+ * @brief Board::free_slot
+ * @param col
+ * @return the position of the free
+ * slot in the column, or -1 if
+ * there is no free slot.
+ */
+int Board::free_slot(int col) {
+
+    int current_cell = col+((rows-1)*cols);
+
+    while (current_cell>=0) {
+        if (this->internal_board[current_cell] == CELL_EMPTY) {
+            int row = (current_cell-col)/cols;
+            return row;
+        } else {
+            current_cell -= cols;
+        }
+    }
+
+    return -1;
+}
+
+/**
+ * @brief Board::place
+ * @param col
+ * @param player
+ * @return
+ *
+ * Player makes a move and drops in column.
+ *
+ * Returns false if the player can't play there,
+ * can't play at all or if the game is over
+ */
 bool Board::place(int col, player_t player) {
 
     if (turn != player || completed)
         return false;
 
-    int current_cell = col+((rows-1)*cols);
 
-    while (current_cell>=0) {
+    int row = this->free_slot(col);
 
-        if (this->internal_board[current_cell] == CELL_EMPTY) {
-            int row = (current_cell-col)/cols;
-
-            this->internal_board[current_cell] = (cell_t)player;
-            turn = (player_t)~turn;
-            check_winner(row,col);
-            emit changed(row,col);
-            return true;
-        } else {
-            current_cell -= cols;
-        }
-
+    if (row == -1) {
+        return false;
     }
 
-    return false;
+    this->internal_board[col+row*cols] = (cell_t)player;
+    turn = (player_t)~turn;
+    emit changed(row,col);
+    check_winner(row,col);
+    return true;
 }
 
 void Board::check_winner(int row, int col) {
@@ -149,24 +201,32 @@ win:
     completed = true;
 }
 
+/**
+ * @brief Board::get_turn
+ * @return the player that needs to play
+ */
 player_t Board::get_turn() {
     return turn;
 }
 
-
+/**
+ * @brief Board::dump
+ *
+ * Prints the board on stdout
+ */
 void Board::dump() {
     for (int r=0;r<rows;r++) {
         for (int c=0;c<cols;c++) {
             char cell;
             switch (this->internal_board[r*cols+c]) {
-                case CELL_EMPTY:
-                    cell= '.';
-                    break;
                 case CELL_RED:
                     cell='X';
                     break;
                 case CELL_YELLOW:
                     cell='O';
+                    break;
+                default:
+                    cell= '.';
                     break;
             }
             printf ("%c ",cell);
@@ -175,6 +235,17 @@ void Board::dump() {
     }
 }
 
+
+/**
+ * @brief Board::get_content
+ * @param row
+ * @param col
+ * @return the content for the specified cell.
+ *
+ * Boundary checks are performed so if the cell
+ * is out of the board, it is considered as an
+ * empty cell.
+ */
 cell_t Board::get_content(int row, int col) {
     if (row<rows && col < cols)
         return this->internal_board[col+row*cols];

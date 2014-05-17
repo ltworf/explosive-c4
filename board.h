@@ -59,6 +59,7 @@ private:
     player_t turn = PLAYER_RED;
     void check_winner(int row, int col);
     void init(int rows, int cols, player_t initial);
+    int free_slot(int col);
 
     bool completed = false;
 

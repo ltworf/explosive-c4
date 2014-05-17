@@ -16,6 +16,7 @@ MainUI::MainUI(QWidget *parent) :
 
     ui->frmLocalGame->setVisible(false);
     ui->frmAIGame->setVisible(false);
+    ui->frmAbout->setVisible(false);
 
     ui->frmLocalGame->layout()->addWidget(board_local);
     ui->frmAIGame->layout()->addWidget(board_AI);
