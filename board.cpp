@@ -181,6 +181,3 @@ cell_t Board::get_content(int row, int col) {
     else
         return CELL_EMPTY;
 }
-
-
-#include "board.moc"

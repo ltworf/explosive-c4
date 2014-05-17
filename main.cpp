@@ -1,13 +1,15 @@
-#include <QtGui/QApplication>
-#include "explosive-c4.h"
+#include <QApplication>
+
+
+#include "mainui.h"
 
 #include "board.h"
 
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
-    explosive_c4 foo;
-    foo.show();
+    MainUI* foo = new MainUI();
+    foo->show();
     return app.exec();
 
 /*

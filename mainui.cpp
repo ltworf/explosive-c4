@@ -1,13 +1,15 @@
 #include "mainui.h"
 #include "ui_mainui.h"
 
-
-
 MainUI::MainUI(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainUI)
 {
     ui->setupUi(this);
+
+    resize(457, 640);
+
+    setWindowTitle("explosive-c4");
 
     board_local = new BoardWidget(BOARD_WIDGET_LOCAL);
     board_AI = new BoardWidget(BOARD_WIDGET_AI);
@@ -27,5 +29,3 @@ MainUI::~MainUI() {
     delete board_AI;
     delete board_local;
 }
-
-#include "mainui.moc"

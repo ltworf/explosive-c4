@@ -20,7 +20,7 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include <qt4/QtCore/qobject.h>
+#include <QObject>
 
 typedef enum {
     PLAYER_RED=1,

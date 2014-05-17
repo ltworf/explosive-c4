@@ -17,10 +17,10 @@
  *
  */
 
-#include <QtGui/QPainter>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QColor>
-#include <QtGui/QBrush>
+#include <QPainter>
+#include <QMouseEvent>
+#include <QColor>
+#include <QBrush>
 
 #include "boardwidget.h"
 #include "boardai.h"
@@ -41,7 +41,8 @@ void BoardWidget::init() {
             board = new Board();
             break;
         case BOARD_WIDGET_AI:
-            board = new BoardAI();
+            //board = new BoardAI();
+            break;
     }
     connect(board,
             SIGNAL(changed(int,int)),
@@ -156,6 +157,3 @@ QSize BoardWidget::sizeHint() {
 
     return QSize(cols*diameter,rows*diameter);
 }
-
-
-#include "boardwidget.moc"
