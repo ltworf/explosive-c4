@@ -43,6 +43,9 @@ void BoardWidget::init() {
         case BOARD_WIDGET_AI:
             board = new BoardAI();
             break;
+        case BOARD_WIDGET_NETWORK:
+            //TODO something about this
+            break;
     }
     connect(board,
             SIGNAL(changed(int,int)),
