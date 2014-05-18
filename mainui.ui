@@ -20,6 +20,11 @@ color: white;
 font: 24px;
 }
 
+QPushButton:disabled {
+background-color: rgb(67, 67, 67);
+border-color: rgb(67, 67, 67);
+}
+
 
 
 QPushButton {
@@ -228,7 +233,10 @@ border-color: rgb(255, 193, 0);
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>About</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;explosive-c4&lt;/span&gt;&lt;/p&gt;&lt;p&gt;GPLv3 License &lt;/p&gt;&lt;p&gt;Contact: Salvo 'LtWorf' Tomaselli &amp;lt;tiposchi@tiscali.it&amp;gt; &lt;/p&gt;&lt;p&gt;https://github.com/ltworf/explosive-c4&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -240,7 +248,7 @@ border-color: rgb(255, 193, 0);
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>517</height>
+          <height>313</height>
          </size>
         </property>
        </spacer>
