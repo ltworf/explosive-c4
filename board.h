@@ -44,13 +44,13 @@ public:
     ~Board();
 
     void get_size(int *rows, int *cols);
-    bool place(int col, player_t player);
+    virtual bool place(int col, player_t player);
     cell_t get_content(int row, int col);
     player_t get_turn();
 
     void dump();
 
-private:
+protected:
     int rows;
     int cols;
     int size;

@@ -18,3 +18,35 @@
  */
 
 #include "boardai.h"
+
+bool BoardAI::place(int col, player_t player) {
+
+    bool r = Board::place(col,player);
+
+    if (!r)
+        return false;
+
+    if (player != this->aiplayer) {
+        //Play AI round
+        airound();
+    }
+
+    return true;
+
+}
+
+void BoardAI::airound() {
+
+    if (this->completed) {
+        return;
+    }
+
+    int rows,cols;
+    this->get_size(&rows,&cols);
+    int c;
+
+
+    do {
+        c = rand() % this->cols;
+    } while(!this->place(c,this->aiplayer));
+}

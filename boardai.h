@@ -24,6 +24,12 @@
 
 class BoardAI: public Board {
 
+public:
+    bool place(int col, player_t player) override;
+
+private:
+    player_t aiplayer = PLAYER_YELLOW;
+    void airound();
 };
 
 #endif // BOARDAI_H
