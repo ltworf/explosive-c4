@@ -41,12 +41,33 @@ void BoardAI::airound() {
         return;
     }
 
+
+    player_t other_player;
+    if (aiplayer==PLAYER_RED)
+        other_player = PLAYER_YELLOW;
+    else
+        other_player = PLAYER_RED;
+
+
     //Win in 1 move
     {
         for (int c=0; c<this->cols; c++) {
             int r = free_slot(c);
 
             if (r != -1 && winning_move(r,c,aiplayer)) {
+                place(c,aiplayer);
+                return;
+            }
+
+        }
+    }
+
+    //Prevent win in 1 move
+    {
+        for (int c=0; c<this->cols; c++) {
+            int r = free_slot(c);
+
+            if (r != -1 && winning_move(r,c,other_player)) {
                 place(c,aiplayer);
                 return;
             }
