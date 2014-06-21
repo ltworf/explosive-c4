@@ -12,15 +12,4 @@ int main(int argc, char** argv)
     foo->show();
     return app.exec();
 
-/*
-    Board *b = new Board(7,7);
-
-    b->place(0,PLAYER_RED);
-    b->place(0,PLAYER_YELLOW);
-    b->place(0,PLAYER_YELLOW);
-    b->place(0,PLAYER_YELLOW);
-
-    b->place(6,PLAYER_RED);
-
-    b->dump();*/
 }
