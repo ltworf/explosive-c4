@@ -41,12 +41,24 @@ void BoardAI::airound() {
         return;
     }
 
-    int rows,cols;
-    this->get_size(&rows,&cols);
-    int c;
+    //Win in 1 move
+    {
+        for (int c=0; c<this->cols; c++) {
+            int r = free_slot(c);
 
+            if (r != -1 && winning_move(r,c,aiplayer)) {
+                place(c,aiplayer);
+                return;
+            }
 
-    do {
-        c = rand() % this->cols;
-    } while(!this->place(c,this->aiplayer));
+        }
+    }
+
+    //Play randomly
+    {
+        int c;
+        do {
+            c = rand() % this->cols;
+        } while(!this->place(c,this->aiplayer));
+    }
 }
