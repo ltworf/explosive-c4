@@ -135,10 +135,24 @@ bool Board::place(int col, player_t player) {
     return true;
 }
 
-void Board::check_winner(int row, int col) {
+/**
+ * @brief Board::winning_move
+ * Check if playing in row,col is a winning move.
+ *
+ * It doesn't check if it's a valid move.
+ *
+ *
+ * @param row
+ * @param col
+ * @return
+ */
+bool Board::winning_move(int row, int col, player_t player) {
 
-    cell_t current = get_content(row,col);
-    player_t current_player = (player_t)current;
+    cell_t previous = get_content(row,col);
+
+    this->internal_board[col+row*cols] = (cell_t)player;
+
+    cell_t current = (cell_t)player;
 
     // diagonal
     {
@@ -195,10 +209,22 @@ void Board::check_winner(int row, int col) {
         if (count == 3)
             goto win;
     }
-    return;
+
+    this->internal_board[col+row*cols] = previous;
+    return false;
 win:
-    emit winner(current_player,row,col);
-    completed = true;
+    this->internal_board[col+row*cols] = previous;
+    return true;
+}
+
+void Board::check_winner(int row, int col) {
+
+    player_t player = (player_t)get_content(row,col);
+
+    if (winning_move(row, col, player)) {
+        emit winner(player,row,col);
+        completed = true;
+    }
 }
 
 /**
