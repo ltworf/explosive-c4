@@ -91,12 +91,51 @@ void BoardAI::airound() {
                 )) {
                     int r1 = free_slot(col-1);
                     int r2= free_slot(col+2);
+                    int r3 = free_slot(col+1);
 
                     if (r1== row) {
                         place(col-1, aiplayer);
                         return;
                     } else if (r2== row){
                         place(col+2,aiplayer);
+                        return;
+                    } else if (r3== row) {
+                        place(col+1,aiplayer);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    //Diagonal
+    {
+        for (int row = 1; row< this->rows-1; row ++) {
+            for (int col = 2; col < this->cols-2; col++) {
+                if (
+                (
+                get_content(row+1,col-1) == CELL_EMPTY &&
+                get_content(row,col) == (cell_t)other_player &&
+                get_content(row-1,col+1) == (cell_t)other_player &&
+                get_content(row-2,col+2) == CELL_EMPTY
+                ) ||
+                (
+                get_content(row+1,col-1) == CELL_EMPTY &&
+                get_content(row,col) == (cell_t)other_player &&
+                get_content(row-1,col+1) == CELL_EMPTY &&
+                get_content(row-2,col+2) == (cell_t)other_player
+                )) {
+                    int r1 = free_slot(col-1);
+                    int r2= free_slot(col+2);
+                    int r3 = free_slot(col+1);
+
+                    if (r1== row+1) {
+                        place(col-1, aiplayer);
+                        return;
+                    } else if (r2== row-2){
+                        place(col+2,aiplayer);
+                        return;
+                    } else if (r3== row-1) {
+                        place(col+1,aiplayer);
                         return;
                     }
                 }
