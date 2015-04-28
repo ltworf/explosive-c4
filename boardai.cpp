@@ -37,17 +37,12 @@ bool BoardAI::place(int col, player_t player) {
 
 void BoardAI::airound() {
 
+    player_t other_player = (player_t)~aiplayer;
+
+    //Do nothing if the game is already over
     if (this->completed) {
         return;
     }
-
-
-    player_t other_player;
-    if (aiplayer==PLAYER_RED)
-        other_player = PLAYER_YELLOW;
-    else
-        other_player = PLAYER_RED;
-
 
     //Win in 1 move
     {
@@ -74,6 +69,43 @@ void BoardAI::airound() {
 
         }
     }
+
+    //Block lineup of 3 central pieces
+
+    //Horizontal
+    {
+        for (int row = 0; row< this->rows; row ++) {
+            for (int col = 2; col < this->cols-2; col++) {
+                if (
+                (
+                get_content(row,col-1) == CELL_EMPTY &&
+                get_content(row,col) == (cell_t)other_player &&
+                get_content(row,col+1) == (cell_t)other_player &&
+                get_content(row,col+2) == CELL_EMPTY
+                ) ||
+                (
+                get_content(row,col-1) == CELL_EMPTY &&
+                get_content(row,col) == (cell_t)other_player &&
+                get_content(row,col+1) == CELL_EMPTY &&
+                get_content(row,col+2) == (cell_t)other_player
+                )) {
+                    int r1 = free_slot(col-1);
+                    int r2= free_slot(col+2);
+
+                    if (r1== row) {
+                        place(col-1, aiplayer);
+                        return;
+                    } else if (r2== row){
+                        place(col+2,aiplayer);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+
+    //TODO blacklist some columns
 
     //Play randomly
     {
