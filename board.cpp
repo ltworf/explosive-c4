@@ -148,6 +148,7 @@ bool Board::place(int col, player_t player) {
  */
 bool Board::winning_move(int row, int col, player_t player) {
 
+    //Store the previous value of the cell
     cell_t previous = get_content(row,col);
 
     this->internal_board[col+row*cols] = (cell_t)player;
