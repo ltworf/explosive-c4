@@ -16,8 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#include <unordered_set>
 
 #include "boardai.h"
+
 
 bool BoardAI::place(int col, player_t player) {
 
@@ -50,6 +52,7 @@ void BoardAI::airound() {
             int r = free_slot(c);
 
             if (r != -1 && winning_move(r,c,aiplayer)) {
+                printf("Win in 1 move\n");
                 place(c,aiplayer);
                 return;
             }
@@ -63,10 +66,10 @@ void BoardAI::airound() {
             int r = free_slot(c);
 
             if (r != -1 && winning_move(r,c,other_player)) {
+                printf("Prevent win in 1 move\n");
                 place(c,aiplayer);
                 return;
             }
-
         }
     }
 
@@ -75,7 +78,7 @@ void BoardAI::airound() {
     //Horizontal
     {
         for (int row = 0; row< this->rows; row ++) {
-            for (int col = 2; col < this->cols-2; col++) {
+            for (int col = 1; col < this->cols-2; col++) {
                 if (
                 (
                 get_content(row,col-1) == CELL_EMPTY &&
@@ -94,12 +97,15 @@ void BoardAI::airound() {
                     int r3 = free_slot(col+1);
 
                     if (r1== row) {
+                        printf("Prevent horizontal lineup of 3 pieces %d\n",__LINE__);
                         place(col-1, aiplayer);
                         return;
                     } else if (r2== row){
+                        printf("Prevent horizontal lineup of 3 pieces %d\n",__LINE__);
                         place(col+2,aiplayer);
                         return;
                     } else if (r3== row) {
+                        printf("Prevent horizontal lineup of 3 pieces %d\n",__LINE__);
                         place(col+1,aiplayer);
                         return;
                     }
@@ -108,6 +114,43 @@ void BoardAI::airound() {
         }
     }
     //Diagonal
+    {
+        for (int row = 1; row< this->rows-1; row ++) {
+            for (int col = 2; col < this->cols-2; col++) {
+                if (
+                (
+                get_content(row-1,col-1) == CELL_EMPTY &&
+                get_content(row,col) == (cell_t)other_player &&
+                get_content(row+1,col+1) == (cell_t)other_player &&
+                get_content(row+2,col+2) == CELL_EMPTY
+                ) ||
+                (
+                get_content(row-1,col-1) == CELL_EMPTY &&
+                get_content(row,col) == (cell_t)other_player &&
+                get_content(row+1,col+1) == CELL_EMPTY &&
+                get_content(row+2,col+2) == (cell_t)other_player
+                )) {
+                    int r1 = free_slot(col-1);
+                    int r2= free_slot(col+2);
+                    int r3 = free_slot(col+1);
+
+                    if (r1== row-1) {
+                        place(col-1, aiplayer);
+                        printf("Prevent diagonal lineup of 3 pieces %d\n",__LINE__);
+                        return;
+                    } else if (r2== row+2){
+                        place(col+2,aiplayer);
+                        printf("Prevent diagonal lineup of 3 pieces %d\n",__LINE__);
+                        return;
+                    } else if (r3== row+1) {
+                        place(col+1,aiplayer);
+                        printf("Prevent diagonal lineup of 3 pieces %d\n",__LINE__);
+                        return;
+                    }
+                }
+            }
+        }
+    }
     {
         for (int row = 1; row< this->rows-1; row ++) {
             for (int col = 2; col < this->cols-2; col++) {
@@ -130,12 +173,15 @@ void BoardAI::airound() {
 
                     if (r1== row+1) {
                         place(col-1, aiplayer);
+                        printf("Prevent diagonal lineup of 3 pieces %d\n",__LINE__);
                         return;
                     } else if (r2== row-2){
                         place(col+2,aiplayer);
+                        printf("Prevent diagonal lineup of 3 pieces %d\n",__LINE__);
                         return;
                     } else if (r3== row-1) {
                         place(col+1,aiplayer);
+                        printf("Prevent diagonal lineup of 3 pieces %d\n",__LINE__);
                         return;
                     }
                 }
@@ -144,13 +190,26 @@ void BoardAI::airound() {
     }
 
 
-    //TODO blacklist some columns
-
-    //Play randomly
+    //play randomly but blacklist some columns
     {
-        int c;
-        do {
-            c = rand() % this->cols;
-        } while(!this->place(c,this->aiplayer));
+        printf("Randomly… %d\n",__LINE__);
+        std::unordered_set<int> allowed_columns;
+        for (int c=0; c< this->cols;c++)
+            allowed_columns.insert(c);
+
+        for (int c=0; c< this->cols;c++) {
+            int r = free_slot(c)-1;
+            if (r>=0 && winning_move(r,c,other_player)) {
+                allowed_columns.erase(c);
+            }
+        }
+
+
+            int c;
+            do {
+                c = rand() % this->cols;
+                if ((!allowed_columns.empty()) && (allowed_columns.find(c) != allowed_columns.end()))
+                    continue;
+            } while(!this->place(c,this->aiplayer));
     }
 }
