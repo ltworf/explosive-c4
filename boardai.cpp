@@ -192,24 +192,32 @@ void BoardAI::airound() {
 
     //play randomly but blacklist some columns
     {
-        printf("Randomly… %d\n",__LINE__);
+        printf("Randomly… %d: ",__LINE__);
         std::unordered_set<int> allowed_columns;
-        for (int c=0; c< this->cols;c++)
+
+        for (int c=0; c< this->cols;c++) {
             allowed_columns.insert(c);
+
+        }
+
 
         for (int c=0; c< this->cols;c++) {
             int r = free_slot(c)-1;
             if (r>=0 && winning_move(r,c,other_player)) {
                 allowed_columns.erase(c);
+                printf("%d ",c);
             }
         }
+        printf("\n");
 
-
-            int c;
-            do {
-                c = rand() % this->cols;
-                if ((!allowed_columns.empty()) && (allowed_columns.find(c) != allowed_columns.end()))
-                    continue;
-            } while(!this->place(c,this->aiplayer));
+        int c;
+        while (true) {
+            c = rand() % this->cols;
+            printf("Selecting column %d\n",c);
+            if ((!allowed_columns.empty()) && (allowed_columns.find(c) == allowed_columns.end()))
+                continue;
+            if (this->place(c,this->aiplayer))
+                break;
+        }
     }
 }
