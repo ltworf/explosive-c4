@@ -54,6 +54,7 @@ protected:
     int rows;
     int cols;
     int size;
+    int free_cells;
     cell_t *internal_board;
 
     player_t turn = PLAYER_RED;

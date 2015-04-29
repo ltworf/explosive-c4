@@ -59,6 +59,7 @@ void Board::init(int rows, int cols, player_t initial) {
     this->rows = rows;
     this->cols = cols;
     this->size = rows*cols;
+    this->free_cells = rows*cols;
 
     this->internal_board = new cell_t[size];
     memset(internal_board, 0, size*sizeof(cell_t));
@@ -131,6 +132,8 @@ bool Board::place(int col, player_t player) {
     this->internal_board[col+row*cols] = (cell_t)player;
     turn = (player_t)~turn;
     emit changed(row,col);
+    if ((--this->free_cells) == 0)
+        completed = true;
     check_winner(row,col);
     return true;
 }
