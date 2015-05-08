@@ -160,35 +160,45 @@ bool Board::winning_move(int row, int col, player_t player) {
 
     // diagonal
     {
+        printf("Diagonal 1\n");
         int count = 0;
-        for (int i = -3; i<=col+3; i++) {
+        for (int i = -3; i<=3; i++) {
             if (get_content(row+i,col+i) == current)
                 count++;
             else
                 count = 0;
 
+            printf("\tcount: %d\ti: %d\trow+i: %d\tcol+i: %d\tcontent: %d\n",count,i,row+i,col+i, get_content(row+i,col+i));
+
             if (count == 4) {
                 goto win;
             }
         }
+        printf("End Diagonal 1\n");
     }
 
     {
+        printf("Diagonal 2\n");
         int count = 0;
-        for (int i = -3; i<=col+3; i++) {
+        for (int i = -3; i<=3; i++) {
             if (get_content(row+i,col-i) == current)
                 count++;
             else
                 count = 0;
 
+            printf("\tcount: %d\ti: %d\trow+i: %d\tcol+i: %d\tcontent: %d\n",count,i,row+i,col+i, get_content(row+i,col+i));
+
             if (count == 4) {
                 goto win;
             }
+
         }
+        printf("End Diagonal 2\n");
     }
 
     //Horizontal
     {
+        printf("Horizontal\n");
         int count = 0;
         for (int i = col - 3; i <= col + 3; i++) {
 
@@ -197,27 +207,35 @@ bool Board::winning_move(int row, int col, player_t player) {
             else
                 count = 0;
 
+            printf("\tcount: %d\ti: %d\trow+i: %d\tcol+i: %d\tcontent: %d\n",count,i,row,col, get_content(row,i));
+
             if (count == 4) {
                 goto win;
             }
         }
+        printf("End horizontal\n");
     }
 
     //Vertical
     {
+        printf("Vertical\n");
         int count = 0;
         for (int i = row+1; i <=row+3; i++) {
             if (get_content(i,col) == current)
                 count ++;
         }
+
+
         if (count == 3)
             goto win;
+        printf("End vertical\n");
     }
 
     this->internal_board[col+row*cols] = previous;
     return false;
 win:
     this->internal_board[col+row*cols] = previous;
+    printf("END GAME\n");
     return true;
 }
 
@@ -277,7 +295,7 @@ void Board::dump() {
  * empty cell.
  */
 cell_t Board::get_content(int row, int col) {
-    if (row<rows && col < cols)
+    if (row<rows && col < cols && row>= 0 && col >= 0)
         return this->internal_board[col+row*cols];
     else
         return CELL_EMPTY;
