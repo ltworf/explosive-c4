@@ -123,25 +123,6 @@ background-color: rgb(255, 255, 255);
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="cmdNetworkGame">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="locale">
-         <locale language="English" country="UnitedStates"/>
-        </property>
-        <property name="text">
-         <string>Play on the network</string>
-        </property>
-        <property name="autoDefault">
-         <bool>false</bool>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
        <spacer name="verticalSpacer_3">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
