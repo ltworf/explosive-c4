@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include <unordered_set>
+#include <QSet>
 
 #include "boardai.h"
 
@@ -73,6 +73,17 @@ void BoardAI::airound() {
         }
     }
 
+    //Blacklist columns that would make the opponent win
+    QSet<int> blacklist;
+    {
+        for (int c=0; c< this->cols; c++) {
+            int r = free_slot(c);
+            if (r == -1 || (r> 0 && winning_move(r-1,c,other_player)))
+                    blacklist << c;
+
+        }
+    }
+
     //Block lineup of 3 central pieces
 
     //Horizontal
@@ -96,15 +107,15 @@ void BoardAI::airound() {
                     int r2= free_slot(col+2);
                     int r3 = free_slot(col+1);
 
-                    if (r1== row) {
+                    if (r1== row && !blacklist.contains(col-1)) {
                         printf("Prevent horizontal lineup of 3 pieces %d\n",__LINE__);
                         place(col-1, aiplayer);
                         return;
-                    } else if (r2== row){
+                    } else if (r2== row && !blacklist.contains(col+2)){
                         printf("Prevent horizontal lineup of 3 pieces %d\n",__LINE__);
                         place(col+2,aiplayer);
                         return;
-                    } else if (r3== row) {
+                    } else if (r3== row&& !blacklist.contains(col+1)) {
                         printf("Prevent horizontal lineup of 3 pieces %d\n",__LINE__);
                         place(col+1,aiplayer);
                         return;
@@ -134,15 +145,15 @@ void BoardAI::airound() {
                     int r2= free_slot(col+2);
                     int r3 = free_slot(col+1);
 
-                    if (r1== row-1) {
+                    if (r1== row-1&& !blacklist.contains(col-1)) {
                         place(col-1, aiplayer);
                         printf("Prevent diagonal lineup of 3 pieces %d\n",__LINE__);
                         return;
-                    } else if (r2== row+2){
+                    } else if (r2== row+2&& !blacklist.contains(col+2)){
                         place(col+2,aiplayer);
                         printf("Prevent diagonal lineup of 3 pieces %d\n",__LINE__);
                         return;
-                    } else if (r3== row+1) {
+                    } else if (r3== row+1&& !blacklist.contains(col+1)) {
                         place(col+1,aiplayer);
                         printf("Prevent diagonal lineup of 3 pieces %d\n",__LINE__);
                         return;
@@ -171,15 +182,15 @@ void BoardAI::airound() {
                     int r2= free_slot(col+2);
                     int r3 = free_slot(col+1);
 
-                    if (r1== row+1) {
+                    if (r1== row+1&& !blacklist.contains(col-1)) {
                         place(col-1, aiplayer);
                         printf("Prevent diagonal lineup of 3 pieces %d\n",__LINE__);
                         return;
-                    } else if (r2== row-2){
+                    } else if (r2== row-2&& !blacklist.contains(col+2)){
                         place(col+2,aiplayer);
                         printf("Prevent diagonal lineup of 3 pieces %d\n",__LINE__);
                         return;
-                    } else if (r3== row-1) {
+                    } else if (r3== row-1&& !blacklist.contains(col+1)) {
                         place(col+1,aiplayer);
                         printf("Prevent diagonal lineup of 3 pieces %d\n",__LINE__);
                         return;
@@ -189,32 +200,15 @@ void BoardAI::airound() {
         }
     }
 
-
     //play randomly but blacklist some columns
     {
         printf("Randomly… %d: ",__LINE__);
-        std::unordered_set<int> allowed_columns;
-
-        for (int c=0; c< this->cols;c++) {
-            allowed_columns.insert(c);
-
-        }
-
-
-        for (int c=0; c< this->cols;c++) {
-            int r = free_slot(c)-1;
-            if (r>=0 && winning_move(r,c,other_player)) {
-                allowed_columns.erase(c);
-                printf("%d ",c);
-            }
-        }
-        printf("\n");
-
         int c;
         while (true) {
             c = rand() % this->cols;
             printf("Selecting column %d\n",c);
-            if ((!allowed_columns.empty()) && (allowed_columns.find(c) == allowed_columns.end()))
+
+            if (blacklist.contains(c) && blacklist.size() < this->cols)
                 continue;
             if (this->place(c,this->aiplayer))
                 break;
