@@ -57,6 +57,11 @@ CONFIG += mobility
 MOBILITY = 
 CONFIG += c++11
 
+TRANSLATIONS += \
+    explosive-c4_it_IT.ts
+CONFIG += lrelease
+CONFIG += embed_translations
+
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 OTHER_FILES += \
