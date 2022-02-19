@@ -242,7 +242,12 @@ background-color: rgb(255, 255, 255);
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;explosive-c4&lt;/span&gt;&lt;/p&gt;&lt;p&gt;GPLv3 License &lt;/p&gt;&lt;p&gt;Contact: Salvo 'LtWorf' Tomaselli &amp;lt;tiposchi@tiscali.it&amp;gt; &lt;/p&gt;&lt;p&gt;https://github.com/ltworf/explosive-c4&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
+&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;explosive-c4&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Released under AGPLv3&lt;/p&gt;
+&lt;p&gt;Contact: Salvo 'LtWorf' Tomaselli &lt;a href=&quot;mailto:tiposchi@tiscali.it&quot;&gt;&amp;lt;tiposchi@tiscali.it&amp;gt;&lt;/a&gt; &lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/ltworf/explosive-c4&quot;&gt;https://github.com/ltworf/explosive-c4&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>
