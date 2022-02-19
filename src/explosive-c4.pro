@@ -62,3 +62,10 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 OTHER_FILES += \
     android/AndroidManifest.xml
 
+isEmpty(target.path) {
+    target.path = $${DESTDIR}/usr/games
+    export(target.path)
+}
+INSTALLS += target
+
+export(INSTALLS)
