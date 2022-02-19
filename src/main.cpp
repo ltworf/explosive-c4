@@ -29,6 +29,12 @@ author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
+
+    app.setApplicationName("explosive-c4");
+    app.setOrganizationDomain("explosive-c4");
+    app.setOrganizationName("explosive-c4");
+
+
     MainUI* foo = new MainUI();
     foo->show();
     return app.exec();
