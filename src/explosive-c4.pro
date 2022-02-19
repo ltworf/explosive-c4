@@ -68,4 +68,9 @@ isEmpty(target.path) {
 }
 INSTALLS += target
 
+icon.files = extras/explosive-c4.png
+icon.path = $${DESTDIR}/usr/share/icons/hicolor/128x128/apps/
+INSTALLS += icon
+
+
 export(INSTALLS)
