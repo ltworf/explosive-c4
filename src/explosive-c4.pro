@@ -68,6 +68,10 @@ isEmpty(target.path) {
 }
 INSTALLS += target
 
+launcher.files = extras/explosive-c4.desktop
+launcher.path = $${DESTDIR}/usr/share/applications/
+INSTALLS += launcher
+
 icon.files = extras/explosive-c4.png
 icon.path = $${DESTDIR}/usr/share/icons/hicolor/128x128/apps/
 INSTALLS += icon

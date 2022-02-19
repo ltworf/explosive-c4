@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Explosive C4
+Comment=Four in a row game
+Comment[it]=Forza quattro
+Exec=/usr/games/explosive-c4
+Icon=explosive-c4
+Terminal=false
+Type=Application
+Categories=Game;
+Keywords=Games
+X-Purism-FormFactor=Workstation;Mobile;
+StartupNotify=true
