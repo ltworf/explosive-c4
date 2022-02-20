@@ -20,6 +20,8 @@ author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
 
 
 #include <QApplication>
+#include <QTranslator>
+#include <QLocale>
 
 
 #include "mainui.h"
@@ -34,6 +36,15 @@ int main(int argc, char** argv)
     app.setOrganizationDomain("explosive-c4");
     app.setOrganizationName("explosive-c4");
 
+    QTranslator translator;
+    const QStringList uiLanguages = QLocale::system().uiLanguages();
+    for (const QString &locale : uiLanguages) {
+        const QString baseName = "explosive-c4_" + QLocale(locale).name();
+        if (translator.load(":/i18n/" + baseName)) {
+            app.installTranslator(&translator);
+            break;
+        }
+    }
 
     MainUI* foo = new MainUI();
     foo->show();
