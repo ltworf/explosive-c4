@@ -81,5 +81,8 @@ icon.files = extras/explosive-c4.png
 icon.path = $${DESTDIR}/usr/share/icons/hicolor/128x128/apps/
 INSTALLS += icon
 
+manpage.files = extras/explosive-c4.6
+manpage.path = $${DESTDIR}/usr/share/man/man6/
+INSTALLS += manpage
 
 export(INSTALLS)
