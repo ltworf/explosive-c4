@@ -6,7 +6,7 @@ Build-Depends:
  debhelper-compat (= 13),
  qt5-qmake,
  qtbase5-dev,
- qtdeclarative5-dev
+ qttools5-dev-tools
 Standards-Version: 4.6.0
 Homepage: https://github.com/ltworf/explosive-c4
 Vcs-Browser: https://github.com/ltworf/explosive-c4
