@@ -24,7 +24,7 @@ dist:
 	cp -R * /tmp/explosive-c4/
 	( \
 		cd /tmp; \
-		tar -zcf --exclude '*.user' explosive-c4.tar.gz \
+		tar tar --exclude '*.user' -zcf explosive-c4.tar.gz \
 			explosive-c4/src \
 			explosive-c4/LICENSE \
 			explosive-c4/README.md \
