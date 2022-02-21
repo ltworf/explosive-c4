@@ -20,3 +20,6 @@ Description: Four in a row game
  The classic four in a row game.
  Two players can play on the same device, or it can be played
  against an AI.
+ .
+ It is similar to kfourinline but optimised for mobile devices
+ with touch screens and slower CPUs.
