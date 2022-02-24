@@ -1,4 +1,10 @@
-explosive-c4 (1.0-1) UNRELEASED; urgency=low
+explosive-c4 (1.0-2) unstable; urgency=low
+
+  * Switch to source only
+
+ -- Salvo 'LtWorf' Tomaselli <tiposchi@tiscali.it>  Thu, 24 Feb 2022 23:43:46 +0100
+
+explosive-c4 (1.0-1) unstable; urgency=low
 
   * Initial release. (Closes: #1006155)
 
