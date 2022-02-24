@@ -1,3 +1,9 @@
+explosive-c4 (1.1-1) UNRELEASED; urgency=medium
+
+  * New upstream release
+
+ -- Salvo 'LtWorf' Tomaselli <tiposchi@tiscali.it>  Fri, 25 Feb 2022 00:39:14 +0100
+
 explosive-c4 (1.0-2) unstable; urgency=low
 
   * Switch to source only
