@@ -77,11 +77,11 @@ launcher.files = extras/explosive-c4.desktop
 launcher.path = $${DESTDIR}/usr/share/applications/
 INSTALLS += launcher
 
-icon.files = extras/explosive-c4.hi.svg
+icon.files = extras/high/explosive-c4.svg
 icon.path = $${DESTDIR}/usr/share/icons/hicolor/128x128/apps/
 INSTALLS += icon
 
-icon_low.files = extras/explosive-c4.svg
+icon_low.files = extras/low/explosive-c4.svg
 icon_low.path = $${DESTDIR}/usr/share/icons/hicolor/48x48/apps/
 INSTALLS += icon_low
 
