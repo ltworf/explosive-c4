@@ -93,6 +93,12 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
     int h_max = size.height() / rows;
     diameter = w_max < h_max ? w_max : h_max;
 
+    int hole_diam = diameter - 2;
+    if (diameter > 8) {
+        hole_diam = diameter*7/8;
+    }
+    int hole_offset = (diameter - hole_diam)/2;
+
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     for (int r=0; r<rows;r++){
@@ -114,10 +120,10 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
             }
 
             if (c==winner_col and r==winner_row)
-                painter.fillRect(diameter*c,diameter*r,diameter-2,diameter-2,QColor(255,255,255));
+                painter.fillRect(diameter*c,diameter*r,diameter,diameter,QColor(255,255,255));
 
 
-            painter.drawEllipse(diameter*c,diameter*r,diameter-2,diameter-2);
+            painter.drawEllipse(diameter*c+hole_offset,diameter*r+hole_offset,hole_diam,hole_diam);
         }
 
     }
