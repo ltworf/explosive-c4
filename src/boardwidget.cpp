@@ -99,6 +99,9 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
     static const QColor board_color0 = QColor("#434343");
     static const QColor board_color1 = QColor("#333333");
 
+    static const QColor win_color0 = QColor("#f3f3f3");
+    static const QColor win_color1 = QColor("#030303");
+
     QLinearGradient board_gradient(0.73, 0.92, 0.4, 0.06);
     board_gradient.setCoordinateMode(QGradient::ObjectMode);
     board_gradient.setColorAt(0, board_color0);
@@ -107,6 +110,14 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
     QLinearGradient ring_gradient(board_gradient);
     ring_gradient.setColorAt(0, board_color1);
     ring_gradient.setColorAt(1, board_color0);
+
+    QLinearGradient win_gradient(board_gradient);
+    win_gradient.setColorAt(0, win_color0);
+    win_gradient.setColorAt(1, win_color1);
+
+    QLinearGradient ring_win_gradient(win_gradient);
+    ring_win_gradient.setColorAt(0, win_color1);
+    ring_win_gradient.setColorAt(1, win_color0);
 
     painter.fillRect(0,0,size.width(),size.height(),board_gradient);
 
@@ -130,12 +141,13 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 
     for (int r=0; r<rows;r++){
         for (int c=0; c<cols;c++) {
-            if (c==winner_col and r==winner_row)
-                painter.fillRect(diameter*c,diameter*r,diameter,diameter,QColor(255,255,255));
+            bool winner_pos = (c==winner_col and r==winner_row);
+            if (winner_pos)
+                painter.fillRect(diameter*c,diameter*r,diameter,diameter,win_gradient);
 
             cell_t cell = board->get_content(r,c);
 
-            painter.setPen( QPen(ring_gradient, ring_offset) );
+            painter.setPen( QPen((winner_pos ? ring_win_gradient : ring_gradient), ring_offset) );
             painter.drawEllipse(diameter*c + ring_offset, diameter*r + ring_offset, ring_diam, ring_diam);
 
             painter.setPen(QPen(cell_color[cell].first, ring_offset));
