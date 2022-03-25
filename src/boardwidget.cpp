@@ -96,7 +96,19 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 
     QSize size = this->size();
 
-    painter.fillRect(0,0,size.width(),size.height(),QColor(0,0,0));
+    static const QColor board_color0 = QColor("#434343");
+    static const QColor board_color1 = QColor("#333333");
+
+    QLinearGradient board_gradient(0.73, 0.92, 0.4, 0.06);
+    board_gradient.setCoordinateMode(QGradient::ObjectMode);
+    board_gradient.setColorAt(0, board_color0);
+    board_gradient.setColorAt(1, board_color1);
+
+    QLinearGradient ring_gradient(board_gradient);
+    ring_gradient.setColorAt(0, board_color1);
+    ring_gradient.setColorAt(1, board_color0);
+
+    painter.fillRect(0,0,size.width(),size.height(),board_gradient);
 
     int rows;
     int cols;
@@ -108,21 +120,26 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 
     int hole_diam = diameter - 2;
     if (diameter > 8) {
-        hole_diam = diameter*7/8;
+        hole_diam = diameter*3/4;
     }
     int hole_offset = (diameter - hole_diam)/2;
+    int ring_offset = hole_offset/2;
+    int ring_diam = diameter - hole_offset;
 
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     for (int r=0; r<rows;r++){
         for (int c=0; c<cols;c++) {
-            cell_t cell = board->get_content(r,c);
-            painter.setPen(QPen(cell_color[cell].first, hole_offset));
-            painter.setBrush(QBrush(cell_color[cell].second, Qt::SolidPattern));
-
             if (c==winner_col and r==winner_row)
                 painter.fillRect(diameter*c,diameter*r,diameter,diameter,QColor(255,255,255));
 
+            cell_t cell = board->get_content(r,c);
+
+            painter.setPen( QPen(ring_gradient, ring_offset) );
+            painter.drawEllipse(diameter*c + ring_offset, diameter*r + ring_offset, ring_diam, ring_diam);
+
+            painter.setPen(QPen(cell_color[cell].first, ring_offset));
+            painter.setBrush(QBrush(cell_color[cell].second, Qt::SolidPattern));
 
             painter.drawEllipse(diameter*c+hole_offset,diameter*r+hole_offset,hole_diam,hole_diam);
         }
