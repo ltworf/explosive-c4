@@ -31,16 +31,42 @@ author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
 // map cell type to pen and brush color
 static QMap<cell_t, QPair<QColor, QColor> > cell_color;
 
+static const QColor board_color0 = QColor("#434343");
+static const QColor board_color1 = QColor("#333333");
+
+static const QColor win_color0 = QColor("#f3f3f3");
+static const QColor win_color1 = QColor("#030303");
+
+static QLinearGradient board_gradient, ring_gradient;
+static QLinearGradient win_gradient, ring_win_gradient;
 
 BoardWidget::BoardWidget(boardwidget_t board_type) {
     QWidget();
     this->board_type = board_type;
 
-    // initialize color table
+    // initialize color table and gradients
     if (cell_color.empty()) {
         cell_color[CELL_RED]    = qMakePair(QColor("#ff4500"), Qt::red);
         cell_color[CELL_YELLOW] = qMakePair(Qt::yellow, QColor("#ffd700"));
         cell_color[CELL_EMPTY]  = qMakePair(Qt::white, Qt::white);
+
+        board_gradient.setStart(0.73, 0.92);
+        board_gradient.setFinalStop(0.4, 0.6);
+        board_gradient.setCoordinateMode(QGradient::ObjectMode);
+        board_gradient.setColorAt(0, board_color0);
+        board_gradient.setColorAt(1, board_color1);
+
+        ring_gradient = board_gradient;
+        ring_gradient.setColorAt(0, board_color1);
+        ring_gradient.setColorAt(1, board_color0);
+
+        win_gradient = board_gradient;
+        win_gradient.setColorAt(0, win_color0);
+        win_gradient.setColorAt(1, win_color1);
+
+        ring_win_gradient = win_gradient;
+        ring_win_gradient.setColorAt(0, win_color1);
+        ring_win_gradient.setColorAt(1, win_color0);
     }
 
     init();
@@ -95,29 +121,6 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
     QPainter painter(this);
 
     QSize size = this->size();
-
-    static const QColor board_color0 = QColor("#434343");
-    static const QColor board_color1 = QColor("#333333");
-
-    static const QColor win_color0 = QColor("#f3f3f3");
-    static const QColor win_color1 = QColor("#030303");
-
-    QLinearGradient board_gradient(0.73, 0.92, 0.4, 0.06);
-    board_gradient.setCoordinateMode(QGradient::ObjectMode);
-    board_gradient.setColorAt(0, board_color0);
-    board_gradient.setColorAt(1, board_color1);
-
-    QLinearGradient ring_gradient(board_gradient);
-    ring_gradient.setColorAt(0, board_color1);
-    ring_gradient.setColorAt(1, board_color0);
-
-    QLinearGradient win_gradient(board_gradient);
-    win_gradient.setColorAt(0, win_color0);
-    win_gradient.setColorAt(1, win_color1);
-
-    QLinearGradient ring_win_gradient(win_gradient);
-    ring_win_gradient.setColorAt(0, win_color1);
-    ring_win_gradient.setColorAt(1, win_color0);
 
     painter.fillRect(0,0,size.width(),size.height(),board_gradient);
 
