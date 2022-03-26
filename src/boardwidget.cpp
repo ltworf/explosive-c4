@@ -171,13 +171,15 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 
             cell_t cell = board->get_content(r,c);
 
-            painter.setPen( QPen((winner_pos ? ring_win_gradient : ring_gradient), ring_offset) );
-            painter.drawEllipse(x_corner + ring_offset, y_corner + ring_offset, ring_diam, ring_diam);
-
             painter.setPen(QPen(cell_color[cell].first, ring_offset));
             painter.setBrush(QBrush(cell_color[cell].second, Qt::SolidPattern));
 
             painter.drawEllipse(x_corner + hole_offset, y_corner + hole_offset, hole_diam, hole_diam);
+
+            painter.setPen( QPen((winner_pos ? ring_win_gradient : ring_gradient), ring_offset) );
+            painter.setBrush( Qt::NoBrush );
+            painter.drawEllipse(x_corner + ring_offset, y_corner + ring_offset, ring_diam, ring_diam);
+
         }
 
     }
