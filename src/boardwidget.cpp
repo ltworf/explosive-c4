@@ -130,10 +130,26 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
     int w_max = size.width()  / cols;
     int h_max = size.height() / rows;
     diameter = w_max < h_max ? w_max : h_max;
-    // make sure diameter is a multiple of 16
-    // this avoids 1px gaps between the tokens and the hole borders
-    if (diameter > 16)
-        diameter = 16*(diameter/16);
+
+    // except for exceedingly small boards,
+    // the hole through which the token is visible takes up
+    // 3/4th of the cell.
+    // For this to be an integer, the diameter must be a multiple of 4,
+    // but we actually want it to be a multiple of 8, so that the hole can be
+    // centered in the cell.
+    // Additionally, we want enough room around it for the ring, which should be
+    // at least 1px wide, so these computations should be done on the diameter diminished by 2
+
+    if (diameter > 10)
+        diameter = 2 + 8*((diameter-2)/8);
+
+    int hole_diam = diameter - 2;
+    if (diameter > 8) {
+        hole_diam = hole_diam*3/4;
+    }
+    int hole_offset = (diameter - hole_diam)/2;
+    int ring_offset = hole_offset/2;
+    int ring_diam = diameter - hole_offset;
 
     int grid_width  = diameter*cols;
     int grid_height = diameter*rows;
@@ -142,14 +158,6 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 
     painter.fillRect(0, 0, size.width(), size.height(), Qt::black);
     painter.fillRect(margin_x, margin_y, grid_width, grid_height, board_gradient);
-
-    int hole_diam = diameter - 2;
-    if (diameter > 8) {
-        hole_diam = diameter*3/4;
-    }
-    int hole_offset = (diameter - hole_diam)/2;
-    int ring_offset = hole_offset/2;
-    int ring_diam = diameter - hole_offset;
 
     painter.setRenderHint(QPainter::Antialiasing, true);
 
