@@ -24,6 +24,7 @@ author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
 #include <QMouseEvent>
 #include <QColor>
 #include <QBrush>
+#include <stdio.h>
 
 #include "boardwidget.h"
 #include "boardai.h"
@@ -122,15 +123,21 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 
     QSize size = this->size();
 
-    painter.fillRect(0,0,size.width(),size.height(),board_gradient);
-
     int rows;
     int cols;
     board->get_size(&rows,&cols);
 
-    int w_max = size.width() / cols;
+    int w_max = size.width()  / cols;
     int h_max = size.height() / rows;
     diameter = w_max < h_max ? w_max : h_max;
+
+    int grid_width  = diameter*cols;
+    int grid_height = diameter*rows;
+    margin_x = (size.width()  - grid_width )/2;
+    margin_y = (size.height() - grid_height)/2;
+
+    painter.fillRect(0, 0, size.width(), size.height(), Qt::black);
+    painter.fillRect(margin_x, margin_y, grid_width, grid_height, board_gradient);
 
     int hole_diam = diameter - 2;
     if (diameter > 8) {
@@ -145,18 +152,20 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
     for (int r=0; r<rows;r++){
         for (int c=0; c<cols;c++) {
             bool winner_pos = (c==winner_col and r==winner_row);
+            int x_corner = margin_x + diameter*c;
+            int y_corner = margin_y + diameter*r;
             if (winner_pos)
-                painter.fillRect(diameter*c,diameter*r,diameter,diameter,win_gradient);
+                painter.fillRect(x_corner, y_corner, diameter, diameter, win_gradient);
 
             cell_t cell = board->get_content(r,c);
 
             painter.setPen( QPen((winner_pos ? ring_win_gradient : ring_gradient), ring_offset) );
-            painter.drawEllipse(diameter*c + ring_offset, diameter*r + ring_offset, ring_diam, ring_diam);
+            painter.drawEllipse(x_corner + ring_offset, y_corner + ring_offset, ring_diam, ring_diam);
 
             painter.setPen(QPen(cell_color[cell].first, ring_offset));
             painter.setBrush(QBrush(cell_color[cell].second, Qt::SolidPattern));
 
-            painter.drawEllipse(diameter*c+hole_offset,diameter*r+hole_offset,hole_diam,hole_diam);
+            painter.drawEllipse(x_corner + hole_offset, y_corner + hole_offset, hole_diam, hole_diam);
         }
 
     }
@@ -164,13 +173,13 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 }
 
 void BoardWidget::changed(int row, int col) {
-    update(col*diameter,row*diameter,diameter,diameter);
+    update(margin_x + col*diameter, margin_y + row*diameter, diameter, diameter);
 }
 
 
 void BoardWidget::mousePressEvent(QMouseEvent *ev) {
     QWidget::mousePressEvent(ev);
-    int column = ev->x() / diameter;
+    int column = (ev->x() - margin_x) / diameter;
 
     int rows;
     int cols;
