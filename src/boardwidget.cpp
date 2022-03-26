@@ -131,25 +131,22 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
     int h_max = size.height() / rows;
     diameter = w_max < h_max ? w_max : h_max;
 
-    // except for exceedingly small boards,
-    // the hole through which the token is visible takes up
-    // 3/4th of the cell.
-    // For this to be an integer, the diameter must be a multiple of 4,
-    // but we actually want it to be a multiple of 8, so that the hole can be
-    // centered in the cell.
-    // Additionally, we want enough room around it for the ring, which should be
-    // at least 1px wide, so these computations should be done on the diameter diminished by 2
-
-    if (diameter > 10)
-        diameter = 2 + 8*((diameter-2)/8);
-
-    int hole_diam = diameter - 2;
-    if (diameter > 8) {
-        hole_diam = hole_diam*3/4;
-    }
-    int hole_offset = (diameter - hole_diam)/2;
+    // we want the hole to take ~3/4th of a cell, so the offset
+    // for the circle within the cell is 1/8 of the cell width.
+    // we want at least 1px anyway
+    int hole_offset = diameter < 8 ? 1 : diameter/8;
+    // the hole ring is half the hole_offset.
+    // it's OK if this is 0, which only happens for very small boards
+    // (in this case there will be no ring)
     int ring_offset = hole_offset/2;
-    int ring_diam = diameter - hole_offset;
+    // ensure that the hole_offset is even (rounds down)
+    if (ring_offset > 0)
+	    hole_offset = ring_offset*2;
+
+    // the hole diameter will be what's left from the cell diameter
+    // given symmetric offset
+    int hole_diam = diameter - 2*hole_offset;
+    int ring_diam = diameter - 2*ring_offset;
 
     int grid_width  = diameter*cols;
     int grid_height = diameter*rows;
@@ -176,9 +173,11 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 
             painter.drawEllipse(x_corner + hole_offset, y_corner + hole_offset, hole_diam, hole_diam);
 
-            painter.setPen( QPen((winner_pos ? ring_win_gradient : ring_gradient), ring_offset) );
-            painter.setBrush( Qt::NoBrush );
-            painter.drawEllipse(x_corner + ring_offset, y_corner + ring_offset, ring_diam, ring_diam);
+	    if (ring_offset > 0) {
+		    painter.setPen( QPen((winner_pos ? ring_win_gradient : ring_gradient), ring_offset) );
+		    painter.setBrush( Qt::NoBrush );
+		    painter.drawEllipse(x_corner + ring_offset, y_corner + ring_offset, ring_diam, ring_diam);
+	    }
 
         }
 
