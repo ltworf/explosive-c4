@@ -130,6 +130,10 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
     int w_max = size.width()  / cols;
     int h_max = size.height() / rows;
     diameter = w_max < h_max ? w_max : h_max;
+    // make sure diameter is a multiple of 16
+    // this avoids 1px gaps between the tokens and the hole borders
+    if (diameter > 16)
+        diameter = 16*(diameter/16);
 
     int grid_width  = diameter*cols;
     int grid_height = diameter*rows;
