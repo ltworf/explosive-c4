@@ -24,6 +24,7 @@ author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
 #include <QMouseEvent>
 #include <QColor>
 #include <QBrush>
+#include <stdio.h>
 
 #include "boardwidget.h"
 #include "boardai.h"
@@ -31,16 +32,42 @@ author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
 // map cell type to pen and brush color
 static QMap<cell_t, QPair<QColor, QColor> > cell_color;
 
+static const QColor board_color0 = QColor("#434343");
+static const QColor board_color1 = QColor("#333333");
+
+static const QColor win_color0 = QColor("#f3f3f3");
+static const QColor win_color1 = QColor("#030303");
+
+static QLinearGradient board_gradient, ring_gradient;
+static QLinearGradient win_gradient, ring_win_gradient;
 
 BoardWidget::BoardWidget(boardwidget_t board_type) {
     QWidget();
     this->board_type = board_type;
 
-    // initialize color table
+    // initialize color table and gradients
     if (cell_color.empty()) {
         cell_color[CELL_RED]    = qMakePair(QColor("#ff4500"), Qt::red);
         cell_color[CELL_YELLOW] = qMakePair(Qt::yellow, QColor("#ffd700"));
         cell_color[CELL_EMPTY]  = qMakePair(Qt::white, Qt::white);
+
+        board_gradient.setStart(0.73, 0.92);
+        board_gradient.setFinalStop(0.4, 0.6);
+        board_gradient.setCoordinateMode(QGradient::ObjectMode);
+        board_gradient.setColorAt(0, board_color0);
+        board_gradient.setColorAt(1, board_color1);
+
+        ring_gradient = board_gradient;
+        ring_gradient.setColorAt(0, board_color1);
+        ring_gradient.setColorAt(1, board_color0);
+
+        win_gradient = board_gradient;
+        win_gradient.setColorAt(0, win_color0);
+        win_gradient.setColorAt(1, win_color1);
+
+        ring_win_gradient = win_gradient;
+        ring_win_gradient.setColorAt(0, win_color1);
+        ring_win_gradient.setColorAt(1, win_color0);
     }
 
     init();
@@ -96,35 +123,63 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 
     QSize size = this->size();
 
-    painter.fillRect(0,0,size.width(),size.height(),QColor(0,0,0));
-
     int rows;
     int cols;
     board->get_size(&rows,&cols);
 
-    int w_max = size.width() / cols;
+    int w_max = size.width()  / cols;
     int h_max = size.height() / rows;
     diameter = w_max < h_max ? w_max : h_max;
 
+    // except for exceedingly small boards,
+    // the hole through which the token is visible takes up
+    // 3/4th of the cell.
+    // For this to be an integer, the diameter must be a multiple of 4,
+    // but we actually want it to be a multiple of 8, so that the hole can be
+    // centered in the cell.
+    // Additionally, we want enough room around it for the ring, which should be
+    // at least 1px wide, so these computations should be done on the diameter diminished by 2
+
+    if (diameter > 10)
+        diameter = 2 + 8*((diameter-2)/8);
+
     int hole_diam = diameter - 2;
     if (diameter > 8) {
-        hole_diam = diameter*7/8;
+        hole_diam = hole_diam*3/4;
     }
     int hole_offset = (diameter - hole_diam)/2;
+    int ring_offset = hole_offset/2;
+    int ring_diam = diameter - hole_offset;
+
+    int grid_width  = diameter*cols;
+    int grid_height = diameter*rows;
+    margin_x = (size.width()  - grid_width )/2;
+    margin_y = (size.height() - grid_height)/2;
+
+    painter.fillRect(0, 0, size.width(), size.height(), Qt::black);
+    painter.fillRect(margin_x, margin_y, grid_width, grid_height, board_gradient);
 
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     for (int r=0; r<rows;r++){
         for (int c=0; c<cols;c++) {
+            bool winner_pos = (c==winner_col and r==winner_row);
+            int x_corner = margin_x + diameter*c;
+            int y_corner = margin_y + diameter*r;
+            if (winner_pos)
+                painter.fillRect(x_corner, y_corner, diameter, diameter, win_gradient);
+
             cell_t cell = board->get_content(r,c);
-            painter.setPen(QPen(cell_color[cell].first, hole_offset));
+
+            painter.setPen(QPen(cell_color[cell].first, ring_offset));
             painter.setBrush(QBrush(cell_color[cell].second, Qt::SolidPattern));
 
-            if (c==winner_col and r==winner_row)
-                painter.fillRect(diameter*c,diameter*r,diameter,diameter,QColor(255,255,255));
+            painter.drawEllipse(x_corner + hole_offset, y_corner + hole_offset, hole_diam, hole_diam);
 
+            painter.setPen( QPen((winner_pos ? ring_win_gradient : ring_gradient), ring_offset) );
+            painter.setBrush( Qt::NoBrush );
+            painter.drawEllipse(x_corner + ring_offset, y_corner + ring_offset, ring_diam, ring_diam);
 
-            painter.drawEllipse(diameter*c+hole_offset,diameter*r+hole_offset,hole_diam,hole_diam);
         }
 
     }
@@ -132,13 +187,13 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
 }
 
 void BoardWidget::changed(int row, int col) {
-    update(col*diameter,row*diameter,diameter,diameter);
+    update(margin_x + col*diameter, margin_y + row*diameter, diameter, diameter);
 }
 
 
 void BoardWidget::mousePressEvent(QMouseEvent *ev) {
     QWidget::mousePressEvent(ev);
-    int column = ev->x() / diameter;
+    int column = (ev->x() - margin_x) / diameter;
 
     int rows;
     int cols;

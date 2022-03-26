@@ -56,6 +56,8 @@ private slots:
 private:
     Board * board = NULL;
     int diameter;
+    int margin_x;
+    int margin_y;
     int winner_row = -1;
     int winner_col = -1;
     boardwidget_t board_type;
