@@ -18,6 +18,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
 */
 
+#include <QMap>
+#include <QPair>
 #include <QPainter>
 #include <QMouseEvent>
 #include <QColor>
@@ -26,11 +28,22 @@ author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
 #include "boardwidget.h"
 #include "boardai.h"
 
+// map cell type to pen and brush color
+static QMap<cell_t, QPair<QColor, QColor> > cell_color;
+
+
 BoardWidget::BoardWidget(boardwidget_t board_type) {
     QWidget();
     this->board_type = board_type;
-    init();
 
+    // initialize color table
+    if (cell_color.empty()) {
+        cell_color[CELL_RED]    = qMakePair(QColor("#ff4500"), Qt::red);
+        cell_color[CELL_YELLOW] = qMakePair(Qt::yellow, QColor("#ffd700"));
+        cell_color[CELL_EMPTY]  = qMakePair(Qt::white, Qt::white);
+    }
+
+    init();
 }
 
 void BoardWidget::init() {
@@ -93,31 +106,25 @@ void BoardWidget::paintEvent(QPaintEvent * p) {
     int h_max = size.height() / rows;
     diameter = w_max < h_max ? w_max : h_max;
 
+    int hole_diam = diameter - 2;
+    if (diameter > 8) {
+        hole_diam = diameter*7/8;
+    }
+    int hole_offset = (diameter - hole_diam)/2;
+
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     for (int r=0; r<rows;r++){
         for (int c=0; c<cols;c++) {
             cell_t cell = board->get_content(r,c);
-             switch (cell) {
-                case CELL_RED:
-                    painter.setPen(QPen(Qt::red, 1));
-                    painter.setBrush(QBrush (Qt::red,Qt::SolidPattern));
-                    break;
-                case CELL_YELLOW:
-                    painter.setPen(QPen(Qt::yellow, 1));
-                    painter.setBrush(QBrush (Qt::yellow,Qt::SolidPattern));
-                    break;
-                case CELL_EMPTY:
-                    painter.setPen(QPen(Qt::white, 1));
-                    painter.setBrush(QBrush (Qt::white,Qt::SolidPattern));
-                    break;
-            }
+            painter.setPen(QPen(cell_color[cell].first, hole_offset));
+            painter.setBrush(QBrush(cell_color[cell].second, Qt::SolidPattern));
 
             if (c==winner_col and r==winner_row)
-                painter.fillRect(diameter*c,diameter*r,diameter-2,diameter-2,QColor(255,255,255));
+                painter.fillRect(diameter*c,diameter*r,diameter,diameter,QColor(255,255,255));
 
 
-            painter.drawEllipse(diameter*c,diameter*r,diameter-2,diameter-2);
+            painter.drawEllipse(diameter*c+hole_offset,diameter*r+hole_offset,hole_diam,hole_diam);
         }
 
     }
