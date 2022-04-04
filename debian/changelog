@@ -1,6 +1,7 @@
 explosive-c4 (1.1-1) UNRELEASED; urgency=medium
 
   * New upstream release
+  * Added Bilotta to d/copyright
 
  -- Salvo 'LtWorf' Tomaselli <tiposchi@tiscali.it>  Fri, 25 Feb 2022 00:39:14 +0100
 
