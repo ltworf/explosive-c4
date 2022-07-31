@@ -192,7 +192,7 @@ void BoardWidget::changed(int row, int col) {
 
 void BoardWidget::mousePressEvent(QMouseEvent *ev) {
     QWidget::mousePressEvent(ev);
-    int column = (ev->x() - margin_x) / diameter;
+    int column = (ev->position().x() - margin_x) / diameter;
 
     int rows;
     int cols;
