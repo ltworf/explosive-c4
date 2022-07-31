@@ -4,3 +4,7 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
 	dh $@ --sourcedirectory=src
+
+override_dh_auto_configure:
+	ln -s /usr/bin/qmake6 ./qmake
+	PATH=`pwd`:$(PATH) dh_auto_configure

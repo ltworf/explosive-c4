@@ -20,8 +20,6 @@ Build
 Install the build requirements listed in `debian/control`.
 Adapt the package names to whatever they might be on your distribution.
 
-
-
 ```bash
 mkdir build; cd build; qmake ../src; make -j
 

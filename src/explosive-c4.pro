@@ -23,9 +23,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core widgets
 
 TARGET = explosive-c4
 TEMPLATE = app
