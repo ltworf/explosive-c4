@@ -11,8 +11,8 @@ jobs:
     - name: apt update
       run: sudo apt-get update
     - name: Install dependencies
-      run: sudo apt-get install -y debhelper-compat qt5-qmake qtbase5-dev qttools5-dev-tools build-essential
+      run: sudo apt-get install -y debhelper-compat build-essential qmake6 qt6-base-dev
     - name: qmake
-      run: mkdir b; cd b; qmake ../src
+      run: mkdir b; cd b; qmake6 ../src
     - name: compile
       run: cd b; make -j
