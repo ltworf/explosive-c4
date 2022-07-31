@@ -4,9 +4,9 @@ Priority: optional
 Maintainer: Salvo 'LtWorf' Tomaselli <tiposchi@tiscali.it>
 Build-Depends:
  debhelper-compat (= 13),
- qt5-qmake,
- qtbase5-dev,
- qttools5-dev-tools
+ qmake6,
+ qt6-base-dev,
+ qt6-l10n-tools
 Standards-Version: 4.6.0
 Homepage: https://github.com/ltworf/explosive-c4
 Vcs-Browser: https://github.com/ltworf/explosive-c4
