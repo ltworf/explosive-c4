@@ -15,7 +15,7 @@ Rules-Requires-Root: no
 Package: explosive-c4
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: qtwayland5
+Recommends: qt6-wayland
 Description: Four in a row game
  The classic four in a row game.
  Two players can play on the same device, or it can be played
