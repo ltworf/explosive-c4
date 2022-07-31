@@ -7,7 +7,7 @@ Build-Depends:
  qmake6,
  qt6-base-dev,
  qt6-l10n-tools
-Standards-Version: 4.6.0
+Standards-Version: 4.6.1.0
 Homepage: https://github.com/ltworf/explosive-c4
 Vcs-Browser: https://github.com/ltworf/explosive-c4
 Rules-Requires-Root: no
