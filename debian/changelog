@@ -1,3 +1,9 @@
+explosive-c4 (1.2-2) unstable; urgency=low
+
+  * Clean symlink to qmake and qmake leftovers (Closes: #1049791, #1044378)
+
+ -- Salvo 'LtWorf' Tomaselli <tiposchi@tiscali.it>  Fri, 29 Sep 2023 07:26:20 +0200
+
 explosive-c4 (1.2-1) unstable; urgency=low
 
   * New upstream release
